@@ -2,7 +2,7 @@
 
 Created for 2015 Summer GI Jam
 
-![Screenshot](Screens/screenshot1.png?raw=true "Optional Title")
+Orignal repo can be found here: https://github.com/jmittert/GameJam
 
 ## Requirements
 * 2-4 Players
