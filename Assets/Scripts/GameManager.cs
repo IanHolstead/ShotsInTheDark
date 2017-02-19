@@ -4,7 +4,7 @@ public static class GameManager {
     private static XInputDotNetPure.PlayerIndex[] playerIndices = new XInputDotNetPure.PlayerIndex[] { XInputDotNetPure.PlayerIndex.One, XInputDotNetPure.PlayerIndex.Two, XInputDotNetPure.PlayerIndex.Three, XInputDotNetPure.PlayerIndex.Four };
     static Player[] playerList = new Player[4];
 
-    static LogLevel currentLogLevel = LogLevel.Medium;
+    static LogLevel currentLogLevel = LogLevel.Warning;
 
     public static int AddPlayer(Player player)
     {
@@ -24,7 +24,7 @@ public static class GameManager {
         return XInputDotNetPure.GamePad.GetState(playerIndices[playerIndex]);
     }
 
-    public static void Log(object toPrint, object callingClass = null, LogLevel logLevel = LogLevel.Medium)
+    public static void Log(object toPrint, object callingClass = null, LogLevel logLevel = LogLevel.Warning)
     {
         if (currentLogLevel != LogLevel.None && currentLogLevel >= logLevel)
         {
@@ -41,7 +41,7 @@ public static class GameManager {
     }
 }
 
-public enum LogLevel
-{
-    None, Low, Medium, High, Verbose, Facist
-}
+//public enum LogLevel
+//{
+//    None, Low, Medium, High, Verbose, Facist
+//}

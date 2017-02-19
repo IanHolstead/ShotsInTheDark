@@ -42,7 +42,7 @@ public class Player : MonoBehaviour {
 
         GameManager.Log(lightComponent, this);
 
-        GameManager.Log("Player: " + playerIndex, this, LogLevel.High);
+        GameManager.Log("Player: " + playerIndex, this, LogLevel.Log);
        
         arrowComponent = GetComponentInChildren<LightScript>().gameObject;
         arrowComponent.SetActive(false);
