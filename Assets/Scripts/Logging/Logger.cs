@@ -4,7 +4,7 @@ using System;
 public static class Logger
 {
 
-    public static bool useInGameLogger = true;
+    public static bool useInGameLogger = false;
 
     static LogLevel currentLogLevel = LogLevel.Warning;
 

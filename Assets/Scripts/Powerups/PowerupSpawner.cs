@@ -11,38 +11,42 @@ public class PowerupSpawner : MonoBehaviour {
     public float earliestSpawn = 0f;
     public float latestSpawn = 25f;
 
-    public GameObject LightEmUp;
-    public GameObject MoreArrows;
-    public GameObject BetterBow;
+    //public GameObject LightEmUp;
+    //public GameObject MoreArrows;
+    //public GameObject BetterBow;
 
-    public List<GameObject> powerups;
+    public GameObject[] powerups;
 
 	public AudioClip sound;
 	public AudioClip got;
-    
+
+
     void Start () {
-        init();
+        //init();
         Setup();
     }
 
-    void init()
-    {
-        powerups.Add(LightEmUp);
-        powerups.Add(MoreArrows);
-        powerups.Add(BetterBow);
-    }
+    //void init()
+    //{
+    //    powerups.Add(LightEmUp);
+    //    powerups.Add(MoreArrows);
+    //    powerups.Add(BetterBow);
+    //}
 
     void Setup()
     {
-        if (powerups.Count == 0)
+        PowerupManager.pickupSpawned += PickupSpawned;
+        PowerupManager.pickupPickedup += PickupPickedup;
+
+        if (powerups.Length == 0)
         {
-            Debug.Log("No Powerups!");
+            Logger.Log("No Powerups!", this, LogLevel.Error);
             Destroy(gameObject);
             return;
         }
         randomSpawnTime = Random.Range(earliestSpawn, latestSpawn);
-        pickupToSpawn = powerups[Random.Range(0, powerups.Count - 1)];
-        Debug.Log(pickupToSpawn);
+        pickupToSpawn = powerups[Random.Range(0, powerups.Length - 1)];
+        Logger.Log(pickupToSpawn, this, LogLevel.Log);
     }
 
     void Update () {
@@ -53,10 +57,7 @@ public class PowerupSpawner : MonoBehaviour {
         
         if (age >= randomSpawnTime)
         {
-            foreach (GameObject spawner in GameObject.FindGameObjectsWithTag("Spawner"))
-            {
-                spawner.SendMessage("PickupSpawned");
-            }
+            PowerupManager.pickupSpawned();
             Spawn();
         }
     }
@@ -67,14 +68,14 @@ public class PowerupSpawner : MonoBehaviour {
 		AudioSource.PlayClipAtPoint(sound,transform.position, 0.25f);
     }
 
-    void Reset()
+    void PickupPickedup()
     {
         powerupOnLevel = false;
 		AudioSource.PlayClipAtPoint(got,transform.position, 0.25f);
         Setup();
     }
 
-    void PickupSpawned()
+    public void PickupSpawned()
     {
         powerupOnLevel = true;
         age = 0;

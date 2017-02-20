@@ -52,7 +52,7 @@ namespace ControlWrapping
             }
             set
             {
-                triggerSensitivity = Mathf.Clamp(value, 0, 1);
+                triggerSensitivity = Mathf.Clamp(value, 0.01f, 1);
             }
         }
 

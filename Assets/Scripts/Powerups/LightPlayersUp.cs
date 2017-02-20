@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LightPlayersUp : MonoBehaviour {
 
-    public PlayerLight playerToStalk;
+    public GameObject playerToStalk;
     public float lifeSpan;
     float age = 0f;
 
@@ -17,11 +17,11 @@ public class LightPlayersUp : MonoBehaviour {
         age += Time.deltaTime;
         if (age <= 1f)
         {
-            this.transform.position = Vector3.Lerp(this.transform.position, playerToStalk.transform.position + new Vector3(0, 0, -1), age);
+            transform.position = Vector3.Lerp(transform.position, playerToStalk.transform.position + new Vector3(0, 0, -1), age);
         }
         else
         {
-            this.transform.position = playerToStalk.transform.position + new Vector3(0, 0, -1);
+            transform.position = playerToStalk.transform.position + new Vector3(0, 0, -1);
             if (age / lifeSpan >= .9f)
             {
                 GetComponent<LightScript>().FadeAway(lifeSpan - age);

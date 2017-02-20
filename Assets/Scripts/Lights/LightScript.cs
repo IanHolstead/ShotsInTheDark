@@ -4,21 +4,23 @@ using System.Collections.Generic;
 public class LightScript : MonoBehaviour {
     float radius;
     List<PlayerLight> characters;
-    public bool overrideLight = false;
+
     float fadeTime = -1f;
     float age = 0f;
     float initialLightIntensity;
 
-	// Use this for initialization
+    public AnimationCurve LightFalloff;
+
+    private const float LIGHT_TO_COLLIDER_RADUIS = 2.24f;
+
 	void Start () {
         characters = new List<PlayerLight>();
-        //makes the detection opject the same size as the light
+        //makes the detection object the same size as the light
         radius = GetComponent<Light>().range;
-        GetComponent<CircleCollider2D>().radius = radius;
+        GetComponent<CircleCollider2D>().radius = radius*LIGHT_TO_COLLIDER_RADUIS;
         initialLightIntensity = GetComponent<Light>().intensity;
     }
 	
-	// Update is called once per frame
 	void Update () {
         age += Time.deltaTime;
         List<PlayerLight> toRemove = null;
@@ -50,7 +52,9 @@ public class LightScript : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
-            characters.Add(other.GetComponentInParent<PlayerLight>());
+            Logger.Log("Added: " + other.GetComponent<Player>().PlayerIndex, this, LogLevel.Log);
+
+            characters.Add(other.GetComponent<PlayerLight>());
         }
     }
 
@@ -58,15 +62,17 @@ public class LightScript : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
+            Logger.Log("Removed: " + other.GetComponent<Player>().PlayerIndex, this, LogLevel.Log);
             other.GetComponentInParent<PlayerLight>().removeLight(this);
-            characters.Remove(other.GetComponentInParent<PlayerLight>());
+            characters.Remove(other.GetComponent<PlayerLight>());
         }
     }
 
-    public void RemoveCharacter (PlayerLight character)
+    //For removing dead players
+    public void RemoveCharacter(PlayerLight character)
     {
         characters.Remove(character);
-        Debug.Log("Removed: " + character);
+        Logger.Log("Removed: " + character, this, LogLevel.Log);
     }
 
 	void OnDisable()
@@ -100,28 +106,7 @@ public class LightScript : MonoBehaviour {
     {
         float lightPercent = Mathf.Max(radius - GetDistance(position), 0f) / radius;
 
-        if (overrideLight)
-        {
-            if (lightPercent >= 0.5f)
-            {
-                lightPercent = 0.75f + (lightPercent - .5f) / 2f;
-            }
-            else
-            {
-                lightPercent *= 1.5f;
-            }
-        }
-        else
-        {
-            if (lightPercent >= 0.5f)
-            {
-                lightPercent = (lightPercent / 4f) + (lightPercent - 0.5f) * 1.5f;
-            }
-            else
-            {
-                lightPercent /= 4f;
-            }
-        }
+        lightPercent = LightFalloff.Evaluate(lightPercent);
 
         if (fadeTime != -1)
         {

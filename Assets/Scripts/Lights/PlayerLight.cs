@@ -6,15 +6,14 @@ public class PlayerLight : MonoBehaviour {
     Dictionary<LightScript, float> lights;
     private SpriteRenderer characterSpritRender;
     private SpriteRenderer arrowSpritRender;
-    void Start () {
-        lights = new Dictionary<LightScript, float>();
+
+    void Awake()
+    {
         characterSpritRender = GetComponent<SpriteRenderer>();
         arrowSpritRender = GetComponentInChildren<SpriteRenderer>();
+
+        lights = new Dictionary<LightScript, float>();
     }
-	
-	void Update () {
-        //SetTransperency();
-	}
 
     public void SetTransperency ()
     {
@@ -22,9 +21,9 @@ public class PlayerLight : MonoBehaviour {
         foreach (KeyValuePair<LightScript,float> light in lights)
         {
             alpha += light.Value;
-        }
+        } 
         Color spiteColour = characterSpritRender.color;
-        spiteColour.a = alpha; //TODO this should be clamped
+        spiteColour.a = Mathf.Clamp01(alpha);
         characterSpritRender.color = spiteColour;
         arrowSpritRender.color = spiteColour;
     }
@@ -46,9 +45,9 @@ public class PlayerLight : MonoBehaviour {
         lights.Remove(light);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        GameManager.Log("Removing characters", this, LogLevel.Verbose);
+        Logger.Log("Removing character", this, LogLevel.Log);
         foreach (KeyValuePair<LightScript, float> light in lights)
         {
             light.Key.RemoveCharacter(this);

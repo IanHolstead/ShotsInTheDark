@@ -5,9 +5,8 @@ public class BetterBow : PickupParentClass {
     
     public float factorToIncreaseBowStrength = 2f;
 
-    public override void UsePickup(GameObject parent)
+    public override void UsePickup(Player player)
     {
-        float speed = parent.GetComponentInChildren<Gunfire>().speed;
-        parent.GetComponentInChildren<Gunfire>().speed = speed * factorToIncreaseBowStrength;
+        player.GetComponent<PlayerShooting>().arrowSpeed *= factorToIncreaseBowStrength;
     }
 }

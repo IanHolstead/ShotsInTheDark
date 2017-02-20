@@ -16,6 +16,8 @@ public class BulletScript : MonoBehaviour {
 
 	private AudioSource source;
 
+    private bool hitSomething = false;
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -26,14 +28,24 @@ public class BulletScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		this.lifetime -= 1*Time.deltaTime;
-		if (lifetime < 0.1f) {
-			GameObject LandedArrowClone = (GameObject)Instantiate(LandedArrow, transform.position, transform.rotation);
-			source.PlayOneShot(clatter,1.0f);
-			Destroy(gameObject);
+        
+		lifetime -= Time.deltaTime;
+		if (lifetime < 0f) {
+            Debug.LogError("dead");
+            killSelf();
 		}
-		transform.Translate(Vector3.right*(speed*Mathf.Sqrt(this.lifetime*2))*Time.deltaTime);
-	}
+        if (!hitSomething)
+        {
+            transform.Translate(Vector3.right * (speed * Mathf.Sqrt(this.lifetime * 2)) * Time.deltaTime);
+        }
+    }
+
+    private void killSelf()
+    {
+        GameObject LandedArrowClone = (GameObject)Instantiate(LandedArrow, transform.position, transform.rotation);
+        source.PlayOneShot(clatter, 1.0f);
+        Destroy(gameObject);
+    }
 
 	void SetSpeed (float speed){
 		this.speed = speed;
@@ -41,6 +53,7 @@ public class BulletScript : MonoBehaviour {
 
 	void OnCollisionEnter2D (Collision2D col)
 	{
+        Debug.LogError("HIT");
 		if (col.gameObject.tag == "Player")
 		{
 			col.gameObject.SendMessage("Die",1);
@@ -53,12 +66,18 @@ public class BulletScript : MonoBehaviour {
 			else if(x <= 4) AudioSource.PlayClipAtPoint(deathSound4,transform.position, 0.25f);
 			Destroy(gameObject);
 		}
-		if (col.gameObject.tag == "Wall")
-		{
-			GameObject LandedArrowClone = (GameObject)Instantiate(LandedArrow, transform.position, transform.rotation);
-			source.clip = clatter;
-			AudioSource.PlayClipAtPoint(clatter,transform.position, 0.25f);
-			Destroy(gameObject);
-		}
+        else
+        {
+            killSelf();
+        }
+
+		//if (col.gameObject.tag == "Wall")
+		//{
+  //          killSelf();
+			//GameObject LandedArrowClone = (GameObject)Instantiate(LandedArrow, transform.position, transform.rotation);
+			//source.clip = clatter;
+			//AudioSource.PlayClipAtPoint(clatter,transform.position, 0.25f);
+			//Destroy(gameObject);
+		//}
 	}
 }

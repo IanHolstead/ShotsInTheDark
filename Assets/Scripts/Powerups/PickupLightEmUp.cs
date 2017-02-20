@@ -6,15 +6,14 @@ public class PickupLightEmUp : PickupParentClass {
     public float lightUpLength = 2.0f;
     public GameObject lightPlayersUp;
 
-    public override void UsePickup(GameObject parent)
+    public override void UsePickup(Player player)
     {
-        PlayerLight pickupCharacter = parent.GetComponent<PlayerLight>();
-        foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+        foreach (GameObject otherPlayer in GameObject.FindGameObjectsWithTag("Player"))
         {
-            if (player.GetComponentInParent<PlayerLight>() != pickupCharacter)
+            if (otherPlayer.GetComponent<Player>() != player)
             {
-                GameObject light = (GameObject)Instantiate(lightPlayersUp, transform.position + new Vector3(0, 0, -1), transform.rotation);
-                light.GetComponent<LightPlayersUp>().playerToStalk = player.GetComponentInParent<PlayerLight>();
+                GameObject light = Instantiate(lightPlayersUp, transform.position + new Vector3(0, 0, -1), transform.rotation);
+                light.GetComponent<LightPlayersUp>().playerToStalk = otherPlayer;
                 light.GetComponent<LightPlayersUp>().lifeSpan = lightUpLength;
             }
         }

@@ -7,7 +7,7 @@ public class PlayerAnimation : MonoBehaviour {
 
     
     void Start () {
-        animator = this.GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     public void MovementAnimation(float verticalAxis, float horizontalAxis)
@@ -68,6 +68,11 @@ public class PlayerAnimation : MonoBehaviour {
                 animator.SetInteger("shootingDirection", 3);
             }
         }
+    }
+
+    public void ShootAnimation(bool isShooting)
+    {
+        animator.SetBool("shooting", isShooting);
     }
 
 }

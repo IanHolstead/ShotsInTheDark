@@ -2,149 +2,109 @@
 using System.Collections;
 using ControlWrapping;
 
+[RequireComponent(typeof(PlayerAnimation))]
+[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(PlayerShooting))]
+[RequireComponent(typeof(PlayerLight))]
 public class Player : MonoBehaviour {
 
     
-    public float movementSpeed = 5f;
-    public float rotateSpeed = 10f;
-
-    public float fireRate = 0.1f;
-    public float arrowSpeed = 30f;
-    public int numberOfArrows = 3;
     public int life = 1;
 
-
     public Sprite deathSprite;
-    private GameObject arrowComponent;
 
     private PlayerAnimation animationComponent;
     private PlayerMovement movementComponent;
     private PlayerShooting shootingComponent;
     private PlayerLight lightComponent;
 
+    private Gamepad gamepad;
+
     int playerIndex;
-    bool isShooting = false;
-    float timeSinceLastShot = 0f;
     bool isPlayerAlive = true;
 
-    GamePadWrapper gamePad;
+    public int PlayerIndex
+    {
+        get
+        {
+            return playerIndex;
+        }
+    }
 
-	// Use this for initialization
-	void Start () {
-        playerIndex = GameManager.AddPlayer(this);
-        gamePad = new GamePadWrapper();
-
+    void Awake()
+    {
         //Get Components
         animationComponent = GetComponent<PlayerAnimation>();
         movementComponent = GetComponent<PlayerMovement>();
         shootingComponent = GetComponent<PlayerShooting>();
         lightComponent = GetComponent<PlayerLight>();
+    }
 
-        GameManager.Log(lightComponent, this);
-
-        GameManager.Log("Player: " + playerIndex, this, LogLevel.Log);
-       
-        arrowComponent = GetComponentInChildren<LightScript>().gameObject;
-        arrowComponent.SetActive(false);
+	// Use this for initialization
+	void Start () {
+        playerIndex = GameManager.AddPlayer(this);
+        gamepad = ControllerManager.instance.RequestSpecificGamepad(playerIndex);
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
-        gamePad.CurrentState = GameManager.GetPlayerIndex(playerIndex);
-        timeSinceLastShot += Time.deltaTime;
 
         lightComponent.SetTransperency();
-        
-        Aim();
-        Shoot();
-        Move();
-    }
 
-    void Move()
-    {
-        float horizontalAxis = gamePad.Stick.Left.X;
-        float verticalAxis = gamePad.Stick.Left.Y;
-        if (!isShooting)
+        if (!isPlayerAlive)
         {
-            Vector2 toMove = new Vector2(horizontalAxis, verticalAxis);
-            //toMove.Normalize(); 
-            GetComponent<Rigidbody2D>().velocity = toMove * movementSpeed * Time.deltaTime;
+            return;
+        }
+        //Move
+        movementComponent.Move(gamepad.GetAxis(AxisCode.GamepadAxisLeftX),
+            gamepad.GetAxis(AxisCode.GamepadAxisLeftY), 
+            shootingComponent.IsShooting);
 
-            animationComponent.MovementAnimation(verticalAxis, horizontalAxis);
+        //Aim
+        shootingComponent.Aim(gamepad.GetAxis(AxisCode.GamepadAxisRightX), 
+            gamepad.GetAxis(AxisCode.GamepadAxisRightY));
 
-        }
-        else
+        //Shoot!
+        if (gamepad.GetButtonDown(ActionKeyCode.GamepadRightTrigger)
+            || gamepad.GetButtonDown(ActionKeyCode.GamepadLeftTrigger))
         {
-            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            shootingComponent.Draw();
         }
-    }
-    
-    void Aim()
-    {
-        float aimHorizontal = gamePad.Stick.Right.X;
-        float aimVertical = gamePad.Stick.Right.Y;
-
-        Vector3 toAim = new Vector3(aimHorizontal, aimVertical, 0);
-        if(toAim == Vector3.zero) 
+        if (gamepad.GetButtonUp(ActionKeyCode.GamepadRightTrigger)
+            || gamepad.GetButtonUp(ActionKeyCode.GamepadLeftTrigger))
         {
-            aimHorizontal = gamePad.Stick.Left.X;
-            aimVertical = gamePad.Stick.Left.Y;
-            toAim = new Vector3(aimHorizontal, aimVertical, 0);
-        }
-        toAim.Normalize();
-        if (toAim != Vector3.zero)
-        {
-            float step = rotateSpeed * Time.deltaTime;
-            Vector3 newAim = Vector3.RotateTowards(transform.forward, toAim, step, 0.0F);
-            arrowComponent.transform.rotation = Quaternion.LookRotation(Vector3.forward, newAim) * Quaternion.Euler(0, 0, 90);
-        }
-        animationComponent.AimAnimation(aimHorizontal, aimVertical, Quaternion.identity);
-    }
-
-    void Shoot()
-    {
-        if ((gamePad.ButtonPress.RightTrigger == ButtonPressState.Pressed 
-            || gamePad.ButtonPress.LeftTrigger == ButtonPressState.Pressed) 
-            && timeSinceLastShot >= fireRate)
-        {
-            Debug.Log("Drawing!");
-            isShooting = true;
-            arrowComponent.SetActive(true);
-            //animator.SetBool("shooting", true);
-        }
-        if ((gamePad.ButtonPress.RightTrigger == ButtonPressState.Released 
-            || gamePad.ButtonPress.LeftTrigger == ButtonPressState.Released) 
-            && isShooting)
-        {
-            Debug.Log("Shooting!");
-            isShooting = false;
-            timeSinceLastShot = 0;
-            numberOfArrows--;
-            arrowComponent.SetActive(false);
-            //animator.SetBool("shooting", false);
+            shootingComponent.Shoot();
         }
     }
 
-    void OnShot()
+    /// <summary>
+    /// Arrow hit player
+    /// </summary>
+    /// <param name="damage">an int</param>
+    /// <returns>true if player died</returns>
+    public bool OnShot(int damage)
     {
         life--;
         if (life <= 0)
         {
             Die();
+            return true;
         }
         //play sound
+        return false;
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("Hit!");
+        Logger.Log("Player hit: " + other, this, LogLevel.Log);
     }
 
     void OnTriggerEnter2D(Collider2D otherObject)
     {
         if (otherObject.gameObject.tag == "GroundArrow")
         {
-            numberOfArrows++;
+            shootingComponent.AddArrows(1);
             //ArrowRect.sizeDelta = new Vector2(ArrowRect.sizeDelta.x + 1, 1);
 
             //TODO: this should be done on the arrow
@@ -158,8 +118,9 @@ public class Player : MonoBehaviour {
     void Die()
     {
         isPlayerAlive = false;
-        DestroyObject(GetComponent<PlayerLight>());
-        GetComponent<CharacterController>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<Animator>().enabled = false;
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<SpriteRenderer>().sprite = deathSprite;
     }
 }
