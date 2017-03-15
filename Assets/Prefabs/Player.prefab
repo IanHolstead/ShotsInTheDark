@@ -240,7 +240,7 @@ MonoBehaviour:
     type: 2}
   rotateSpeed: 10
   fireRate: 0.1
-  arrowSpeed: 500
+  arrowSpeed: 800
   numberOfArrows: 3
 --- !u!114 &114406905306897734
 MonoBehaviour:
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 1
-  deathSprite: {fileID: 0}
+  deathSprite: {fileID: 21300012, guid: c50d2fc9fa4e7f34d88aa45dd30c2211, type: 3}
 --- !u!114 &114651567721884446
 MonoBehaviour:
   m_ObjectHideFlags: 1
