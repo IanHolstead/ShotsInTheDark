@@ -21,6 +21,7 @@
         public DoOnce(bool startClosed = false)
         {
             closed = startClosed;
+            Debug.Log("Do once used. You should remove this later");
         }
 
         public bool Enter()

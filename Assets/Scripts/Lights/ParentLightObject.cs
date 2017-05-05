@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//TODO: this isn't used
 public abstract class ParentLightObject : MonoBehaviour
 {
 
@@ -10,10 +11,11 @@ public abstract class ParentLightObject : MonoBehaviour
         return defaultFadeTime;
     }
 
-    public void fadeObjectAway()//GameObject gameObject)
+    public void fadeObjectAway()
     {
         Destroy(gameObject, getFadeTime());
         GetComponentInChildren<LightScript>().FadeAway(getFadeTime());
+        //TODO: this looks wrong
         GetComponent<SpriteRenderer>().enabled = false;//color = new Color(255, 255, 255, 0);
     }
 }

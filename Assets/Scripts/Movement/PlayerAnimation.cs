@@ -12,6 +12,7 @@ public class PlayerAnimation : MonoBehaviour {
 
     public void MovementAnimation(float verticalAxis, float horizontalAxis)
     {
+        //TODO: make this just one function call and set variables
         if (Mathf.Abs(verticalAxis) > Mathf.Abs(horizontalAxis))
         {
             if (verticalAxis > 0)

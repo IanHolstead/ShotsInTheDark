@@ -37,6 +37,7 @@ public class PlayerShooting : MonoBehaviour {
 
     public void AddArrows(int arrowsToAdd)
     {
+        //TODO: Data validation?
         numberOfArrows += arrowsToAdd;
     }
 
@@ -57,6 +58,7 @@ public class PlayerShooting : MonoBehaviour {
         {
             float step = rotateSpeed * Time.deltaTime;
             Vector3 newAim = Vector3.RotateTowards(transform.forward, toAim, step, 0.0F);
+            //TODO: Comment on how below line works
             arrowComponent.transform.rotation = Quaternion.LookRotation(Vector3.forward, newAim) * Quaternion.Euler(0, 0, 90);
         }
         animationComponent.AimAnimation(aimHorizontal, aimVertical, Quaternion.identity);
@@ -79,7 +81,6 @@ public class PlayerShooting : MonoBehaviour {
 
     public void Shoot()
     {
-        
         if (isShooting)
         {
             if (numberOfArrows > 0)

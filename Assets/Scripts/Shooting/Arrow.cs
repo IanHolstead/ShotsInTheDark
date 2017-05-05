@@ -29,6 +29,7 @@ public class Arrow : MonoBehaviour {
 
     public void Shoot(float speed, Player owner) {
         this.owner = owner;
+        //TODO: should have null check
         Physics2D.IgnoreCollision(owner.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         GetComponent<Collider2D>().enabled = true;
         Vector2 direction = transform.rotation * Vector2.right;

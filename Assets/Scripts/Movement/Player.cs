@@ -85,13 +85,14 @@ public class Player : MonoBehaviour {
     /// <returns>true if player died</returns>
     public bool OnShot(int damage)
     {
+        //TODO: doesn't use damage being passed, just subtracts 1
         life--;
         if (life <= 0)
         {
             Die();
             return true;
         }
-        //play sound
+        //TODO: play sound
         return false;
     }
 
@@ -100,6 +101,7 @@ public class Player : MonoBehaviour {
         Logger.Log("Player hit: " + other, this, LogLevel.Log);
     }
 
+    //TODO: Remove me
     void OnTriggerEnter2D(Collider2D otherObject)
     {
         if (otherObject.gameObject.tag == "GroundArrow")

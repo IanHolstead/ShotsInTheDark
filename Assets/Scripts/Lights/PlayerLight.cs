@@ -15,7 +15,8 @@ public class PlayerLight : MonoBehaviour {
         lights = new Dictionary<LightScript, float>();
     }
 
-    public void SetTransperency ()
+    //TODO: rename to UpdateTransperency
+    public void SetTransperency()
     {
         float alpha = 0f;
         foreach (KeyValuePair<LightScript,float> light in lights)
@@ -25,6 +26,7 @@ public class PlayerLight : MonoBehaviour {
         Color spiteColour = characterSpritRender.color;
         spiteColour.a = Mathf.Clamp01(alpha);
         characterSpritRender.color = spiteColour;
+        //TODO: should do the same for arrow.
         arrowSpritRender.color = spiteColour;
     }
 
@@ -47,7 +49,7 @@ public class PlayerLight : MonoBehaviour {
 
     void OnDisable()
     {
-        Logger.Log("Removing character", this, LogLevel.Log);
+        Logger.Log("Removing " + GetComponent<Player>() + " from Player Light", this, LogLevel.Log);
         foreach (KeyValuePair<LightScript, float> light in lights)
         {
             light.Key.RemoveCharacter(this);

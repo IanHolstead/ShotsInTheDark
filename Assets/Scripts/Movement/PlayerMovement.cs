@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
     private PlayerAnimation animationComponent;
 
     public float movementSpeed = 5f;
+
     void Awake()
     {
         animationComponent = GetComponent<PlayerAnimation>();

@@ -13,6 +13,8 @@ public class LightScript : MonoBehaviour {
 
     private const float LIGHT_TO_COLLIDER_RADUIS = 2.24f;
 
+    //Add light ref
+
 	void Start () {
         characters = new List<PlayerLight>();
         //makes the detection object the same size as the light
@@ -24,6 +26,7 @@ public class LightScript : MonoBehaviour {
 	void Update () {
         age += Time.deltaTime;
         List<PlayerLight> toRemove = null;
+        //TODO: what is the null check for?
         foreach (PlayerLight character in characters)
         {
             if (character == null)
@@ -50,6 +53,7 @@ public class LightScript : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        //TODO: Tags are the worst
         if (other.gameObject.tag == "Player")
         {
             Logger.Log("Added: " + other.GetComponent<Player>().PlayerIndex, this, LogLevel.Log);
@@ -58,8 +62,10 @@ public class LightScript : MonoBehaviour {
         }
     }
 
+    //TODO: this looks dated
     void OnTriggerExit2D(Collider2D other)
     {
+        //TODO: Tags are the worst
         if (other.gameObject.tag == "Player")
         {
             Logger.Log("Removed: " + other.GetComponent<Player>().PlayerIndex, this, LogLevel.Log);
@@ -87,6 +93,7 @@ public class LightScript : MonoBehaviour {
 		}
 	}
 	
+    //TODO: remove me
 	//void OnDestroy()
 	//{
  //       foreach (characterLight character in characters)
@@ -111,6 +118,7 @@ public class LightScript : MonoBehaviour {
         if (fadeTime != -1)
         {
             float percentDead = age / fadeTime;
+            //TODO: use light ref
             GetComponent<Light>().intensity = Mathf.Lerp(initialLightIntensity, 0f, percentDead);
             lightPercent *= percentDead;
         }
@@ -122,6 +130,7 @@ public class LightScript : MonoBehaviour {
     {
         Vector2 difference = this.transform.position;
         difference -= position;
+        //TODO: use difference.magnitude
         return Mathf.Sqrt(Mathf.Pow(difference.x, 2f) + Mathf.Pow(difference.y, 2f));
     }
 }
