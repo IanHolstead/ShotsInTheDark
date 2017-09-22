@@ -2,9 +2,9 @@
     public static class GameFunctions
     {
 
-        public static float MapRange(float value, float inRangeA, float inRangeB, float outRangeA, float outRangeB)
+        public static float MapRange(float value, float inMin, float inMax, float outMin, float outMax)
         {
-            return (value - inRangeA) / (outRangeA - inRangeA) * (outRangeB - inRangeB) + inRangeB;
+            return (value - inMin) * (outMax - outMin) / (inMax - inMin);
         }
 
         public static float MapRangeClamped(float value, float inRangeA, float inRangeB, float outRangeMin, float outRangeMax)
