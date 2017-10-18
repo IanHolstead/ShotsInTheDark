@@ -29,7 +29,6 @@ public class MenuController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         GetAllGamePads();
-        print(gamepads);
         titleScreenMovement = FindObjectOfType<PlayerMovement>();
 	}
 	

@@ -130,7 +130,6 @@ public class LightScript : MonoBehaviour {
     {
         Vector2 difference = this.transform.position;
         difference -= position;
-        //TODO: use difference.magnitude
-        return Mathf.Sqrt(Mathf.Pow(difference.x, 2f) + Mathf.Pow(difference.y, 2f));
+        return difference.magnitude;
     }
 }

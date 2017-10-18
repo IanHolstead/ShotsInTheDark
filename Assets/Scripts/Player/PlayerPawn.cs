@@ -49,8 +49,13 @@ public class PlayerPawn : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //TODO: this needs to be removed
-        controllerIndex = GM.AddPlayer(this);
-        controls = new PlayerInput(GM.GetProfile(controllerIndex).KeyBinding, controllerIndex);
+        if (GM.GameInstance == null)
+        {
+            controllerIndex = GM.AddPlayer(this);
+            controls = new PlayerInput(GM.GetProfile(controllerIndex).KeyBinding, controllerIndex);
+            return;
+        }
+        controls = new PlayerInput(playerParent.Profile.KeyBinding, PlayerIndex);
     }
 	
 	// Update is called once per frame
@@ -117,5 +122,11 @@ public class PlayerPawn : MonoBehaviour {
     public void SetPlayerParent(Player parent)
     {
         playerParent = parent;
+    }
+
+    public void SetInitialDirection(Quaternion direction)
+    {
+        Vector3 vectorDir = direction * Vector3.up;
+        animationComponent.MovementAnimation(-vectorDir.x, vectorDir.y);
     }
 }
