@@ -8,7 +8,7 @@ public abstract class PickupParentClass : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
-            Player player = other.GetComponent<Player>();
+            PlayerPawn player = other.GetComponent<PlayerPawn>();
 
             UsePickup(player);
 
@@ -19,7 +19,7 @@ public abstract class PickupParentClass : MonoBehaviour {
         }
     }
 
-    public abstract void UsePickup(Player parent);
+    public abstract void UsePickup(PlayerPawn parent);
 
     //TODO: rewrite this
     void OnDestroy()

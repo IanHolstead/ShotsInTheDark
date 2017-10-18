@@ -2,18 +2,18 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Arrow : MonoBehaviour {
-    private Rigidbody2D rb;
+public class ArrowBaseClass : MonoBehaviour {
+    protected Rigidbody2D rb;
 
     public float lifetime = 0.8f;
     public int damage = 1;
 
     public float fadeTime = .15f;
 
-    private bool arrowStoped = false;
-    private float age = 0;
+    protected bool arrowStoped = false;
+    protected float age = 0;
     bool insideObject = false;
-    private Player owner;
+    protected PlayerPawn owner;
 
     void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -22,22 +22,27 @@ public class Arrow : MonoBehaviour {
 
 	void Update () {
         age += Time.deltaTime;
+        Tick();
+	}
+
+    protected virtual void Tick()
+    {
         if (age > lifetime && owner && !insideObject)
         {
             StopArrow();
         }
-	}
+    }
 
-    public void Shoot(float speed, Player owner) {
+    public virtual void Shoot(float speed, PlayerPawn owner) {
         this.owner = owner;
-        //TODO: should have null check --Should it?
+        //TODO: should have null check --Should it? -- well, I had to made a base class to avoid this
         Physics2D.IgnoreCollision(owner.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         GetComponent<Collider2D>().enabled = true;
         Vector2 direction = transform.rotation * Vector2.right;
         rb.AddForce(direction * speed);
     }
 
-    void StopArrow()
+    protected virtual void StopArrow()
     {
         rb.velocity = Vector2.zero;
         if (owner)
@@ -48,7 +53,7 @@ public class Arrow : MonoBehaviour {
         arrowStoped = true;
     }
 
-    void PickupArrow(Player player)
+    protected virtual void PickupArrow(PlayerPawn player)
     {
         player.GetComponent<PlayerShooting>().AddArrows(1);
 
@@ -58,9 +63,15 @@ public class Arrow : MonoBehaviour {
         Destroy(gameObject, fadeTime);
     }
 
+    //TODO: Test if this can be done better
     void OnCollisionEnter2D(Collision2D otherObject)
     {
-        Player player = otherObject.gameObject.GetComponent<Player>();
+        OnCollision(otherObject);
+    }
+
+    protected virtual void OnCollision(Collision2D otherObject)
+    {
+        PlayerPawn player = otherObject.gameObject.GetComponent<PlayerPawn>();
         //TODO: Remove me
         if (player == owner)
         {
@@ -90,7 +101,8 @@ public class Arrow : MonoBehaviour {
             }
         }
     }
-
+    
+    //TODO: this needs to made virtual
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "ArrowPassThough")
@@ -98,7 +110,8 @@ public class Arrow : MonoBehaviour {
             insideObject = true;
         }
     }
-
+    
+    //TODO: this needs to be made  virtual
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "ArrowPassThough")

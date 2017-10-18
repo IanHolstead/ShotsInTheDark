@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 
-public static class GM { 
-    static Player[] playerList = new Player[4];
+public static class GM {
+
+    public const int MAXPLAYERCOUNT = 4;
+
+    static PlayerPawn[] playerList = new PlayerPawn[4];
     private static GameInstance gameInstance;
 
     //private static GameMode gameMode;
@@ -27,8 +30,15 @@ public static class GM {
         }
     }
 
-    public static int AddPlayer(Player player)
+    /// <summary>
+    /// TODO: DEPRICATED
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static int AddPlayer(PlayerPawn player)
     {
+        Logger.Log("GM.AddPlayer DEPRICATED", null, LogLevel.Warning);
+
         for (int i = 0; i < playerList.Length; i++)
         {
             if (playerList[i] == null)
@@ -40,9 +50,15 @@ public static class GM {
         return -1;
     }
 
+    /// <summary>
+    /// TODO: DEPRICATED
+    /// </summary>
+    /// <param name="playerID"></param>
+    /// <returns></returns>
     public static PlayerProfile GetProfile(int playerID)
     {
-        //TODO: not implemented yet
+        Logger.Log("GM.GetProfile DEPRICATED", null, LogLevel.Warning);
+        //TODO: implemented yet
         return new PlayerProfile();
     }
 }

@@ -25,7 +25,25 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
         StartLocation[] starts = FindObjectsOfType<StartLocation>();
         foreach (StartLocation start in starts)
         {
+            if (!startLocations[start.playerNumber].Equals(null))
+            {
+                Logger.Log("The same player number is used twice!", this, LogLevel.Warning);
+            }
             startLocations[start.playerNumber] = new KeyValuePair<StartLocation, bool>(start, false);
+        }
+
+        if (startLocations.Count < GM.GameInstance.Players.Count)
+        {
+            Logger.Log("Too many players for level!", this, LogLevel.Error);
+        }
+
+        foreach (Player player in GM.GameInstance.Players)
+        {
+            StartLocation startLocation = GetStartLocation();
+            GameObject pawnGameObject = Instantiate(DefaultPawn, startLocation.transform.position, startLocation.transform.rotation);
+            PlayerPawn pawn = pawnGameObject.GetComponent<PlayerPawn>();
+            player.SetPawn(pawn);
+            pawn.SetPlayerParent(player);
         }
 	}
 	

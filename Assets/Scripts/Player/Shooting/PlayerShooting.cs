@@ -88,7 +88,7 @@ public class PlayerShooting : MonoBehaviour {
                 numberOfArrows--;
 
                 GameObject arrow = Instantiate(arrowPrefab, arrowComponent.transform.position, arrowComponent.transform.rotation);
-                arrow.GetComponent<Arrow>().Shoot(arrowSpeed, GetComponent<Player>());
+                arrow.GetComponent<ArrowBaseClass>().Shoot(arrowSpeed, GetComponent<PlayerPawn>());
 
                 Logger.Log("Shooting!", this, LogLevel.Log);
             }

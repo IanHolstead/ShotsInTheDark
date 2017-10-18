@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using ControlWrapping;
 
-public class PlayerControls {
+public class PlayerInput {
     private KeyBinding keyBinding;
     private Gamepad gamepad;
 
-    public PlayerControls(KeyBinding keyBinding, int playerIndex)
+    public PlayerInput(KeyBinding keyBinding, int playerIndex)
     {
         this.keyBinding = keyBinding;
 
         gamepad = ControllerManager.instance.RequestSpecificGamepad(playerIndex);
+        //TODO: what if this returns null?
     }
 
     public float GetAxis(AxisControl control)

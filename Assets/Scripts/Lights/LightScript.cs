@@ -56,7 +56,7 @@ public class LightScript : MonoBehaviour {
         //TODO: Tags are the worst
         if (other.gameObject.tag == "Player")
         {
-            Logger.Log("Added: " + other.GetComponent<Player>().PlayerIndex, this, LogLevel.Log);
+            Logger.Log("Added: " + other.GetComponent<PlayerPawn>().PlayerIndex, this, LogLevel.Log);
 
             characters.Add(other.GetComponent<PlayerLight>());
         }
@@ -68,7 +68,7 @@ public class LightScript : MonoBehaviour {
         //TODO: Tags are the worst
         if (other.gameObject.tag == "Player")
         {
-            Logger.Log("Removed: " + other.GetComponent<Player>().PlayerIndex, this, LogLevel.Log);
+            Logger.Log("Removed: " + other.GetComponent<PlayerPawn>().PlayerIndex, this, LogLevel.Log);
             other.GetComponentInParent<PlayerLight>().removeLight(this);
             characters.Remove(other.GetComponent<PlayerLight>());
         }

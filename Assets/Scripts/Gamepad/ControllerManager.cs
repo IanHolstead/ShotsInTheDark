@@ -75,6 +75,23 @@ public class ControllerManager : MonoBehaviour //: HoloToolkit.Unity.Singleton<C
         return null;
     }
 
+    /// <summary>
+    /// Returns gamepad ref regardless if in use or not
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public Gamepad ForceGetGamePad(int id)
+    {
+        Gamepad toReturn = RequestSpecificGamepad(id);
+        if (toReturn == null)
+        {
+            toReturn = gamePads[id];
+        }
+        return toReturn;
+    }
+
+    //TODO: If I'm correct, this won't actually garbage collect the gamepad since the class originally requesting it should still have a ref.
+    //as such, the gamepad will no longer update but won't null which could lead to bugs
     public void ReturnGamePad(int gamePadID)
     {
         if (gamePads[gamePadID] != null)

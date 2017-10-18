@@ -6,7 +6,7 @@ using ControlWrapping;
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(PlayerShooting))]
 [RequireComponent(typeof(PlayerLight))]
-public class Player : MonoBehaviour {
+public class PlayerPawn : MonoBehaviour {
 
     
     public int life = 1;
@@ -18,17 +18,22 @@ public class Player : MonoBehaviour {
     private PlayerShooting shootingComponent;
     private PlayerLight lightComponent;
 
-    private PlayerProfile profile;
-    private PlayerControls controls;
+    private Player playerParent;
 
-    int playerIndex;
+    private PlayerInput controls;
+
+    private int controllerIndex;
     bool isPlayerAlive = true;
 
     public int PlayerIndex
     {
         get
         {
-            return playerIndex;
+            if (playerParent != null)
+            {
+                return playerParent.PlayerID;
+            }
+            return controllerIndex;
         }
     }
 
@@ -43,9 +48,9 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        playerIndex = GM.AddPlayer(this);
-        controls = new PlayerControls(GM.GetProfile(playerIndex).KeyBinding, playerIndex);
-        
+        //TODO: this needs to be removed
+        controllerIndex = GM.AddPlayer(this);
+        controls = new PlayerInput(GM.GetProfile(controllerIndex).KeyBinding, controllerIndex);
     }
 	
 	// Update is called once per frame
@@ -85,8 +90,7 @@ public class Player : MonoBehaviour {
     /// <returns>true if player died</returns>
     public bool OnShot(int damage)
     {
-        //TODO: doesn't use damage being passed, just subtracts 1
-        life--;
+        life = life - damage;
         if (life <= 0)
         {
             Die();
@@ -108,5 +112,10 @@ public class Player : MonoBehaviour {
         GetComponent<Animator>().enabled = false;
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<SpriteRenderer>().sprite = deathSprite;
+    }
+
+    public void SetPlayerParent(Player parent)
+    {
+        playerParent = parent;
     }
 }
