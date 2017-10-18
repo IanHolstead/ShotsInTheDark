@@ -18,13 +18,4 @@ public class DevLevelKickstart : MonoBehaviour {
             GM.GameInstance.AddPlayer(i);
         }
     }
-
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

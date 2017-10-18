@@ -29,21 +29,23 @@ public class GameInstance : MonoBehaviour {
             return;
         }
 
+        Startup();
+
+    }
+
+    private void Startup()
+    {
         players = new List<Player>();
 
         DontDestroyOnLoad(gameObject);
         GM.GameInstance = this;
-
     }
 
     //This should only be used for dev purposes
     public void Kickstart()
     {
         Logger.Log("Kickstarting game instance, this better not be a real level!", this, LogLevel.Warning);
-        players = new List<Player>();
-
-        DontDestroyOnLoad(gameObject);
-        GM.GameInstance = this;
+        Startup();
     }
 	
 	void Update () {
