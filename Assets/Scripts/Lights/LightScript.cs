@@ -31,8 +31,9 @@ public class LightScript : MonoBehaviour {
 	
 	void Update () {
         age += Time.deltaTime;
+
+        //This is an optimization so that a new list isn't created each frame
         List<PlayerLight> toRemove = null;
-        //TODO: what is the null check for?
         foreach (PlayerLight character in characters)
         {
             if (character == null)

@@ -44,12 +44,6 @@ public class Player
         {
             return controllerID;
         }
-
-        //TODO: remove this
-        set
-        {
-            controllerID = value;
-        }
     }
 
     public Player(PlayerProfile profile, int id, int controllerID)

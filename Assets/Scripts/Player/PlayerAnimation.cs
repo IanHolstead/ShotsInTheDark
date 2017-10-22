@@ -13,31 +13,27 @@ public class PlayerAnimation : MonoBehaviour {
     public void MovementAnimation(float verticalAxis, float horizontalAxis)
     {
         animator.speed = GameFunctions.MapRangeClamped(new Vector2(verticalAxis, horizontalAxis).magnitude, 0, 1, .5f, 1);
-        //TODO: make this just one function call and set variables
+        
         if (Mathf.Abs(verticalAxis) > Mathf.Abs(horizontalAxis))
         {
             if (verticalAxis > 0)
             {
-                animator.SetInteger("direction", 2);
-                animator.SetBool("idle", false);
+                UpdateMovementAnimation(2, false);
             }
             else if (verticalAxis < 0)
             {
-                animator.SetInteger("direction", 0);
-                animator.SetBool("idle", false);
+                UpdateMovementAnimation(0, false);
             }
         }
         else
         {
             if (horizontalAxis > 0)
             {
-                animator.SetInteger("direction", 1);
-                animator.SetBool("idle", false);
+                UpdateMovementAnimation(1, false);
             }
             else if (horizontalAxis < 0)
             {
-                animator.SetInteger("direction", 3);
-                animator.SetBool("idle", false);
+                UpdateMovementAnimation(3, false);
             }
             else
             {
@@ -47,30 +43,41 @@ public class PlayerAnimation : MonoBehaviour {
         }
     }
 
+    private void UpdateMovementAnimation(int direction, bool idle)
+    {
+        animator.SetInteger("direction", direction);
+        animator.SetBool("idle", idle);
+    }
+
     public void AimAnimation(float aimHorizontal, float aimVertical, Quaternion arrowAngle)
     {
         if (Mathf.Abs(aimVertical) > Mathf.Abs(aimHorizontal))
         {
             if (aimVertical > 0)
             {
-                animator.SetInteger("shootingDirection", 2);
+                UpdateAimAnimation(2);
             }
             else if (aimVertical < 0)
             {
-                animator.SetInteger("shootingDirection", 0);
+                UpdateAimAnimation(0);
             }
         }
         else
         {
             if (aimHorizontal > 0)
             {
-                animator.SetInteger("shootingDirection", 1);
+                UpdateAimAnimation(1);
             }
             else if (aimHorizontal < 0)
             {
-                animator.SetInteger("shootingDirection", 3);
+                UpdateAimAnimation(3);
             }
         }
+    }
+
+    private void UpdateAimAnimation(int direction)
+    {
+        animator.SetInteger("shootingDirection", direction);
     }
 
     public void ShootAnimation(bool isShooting)

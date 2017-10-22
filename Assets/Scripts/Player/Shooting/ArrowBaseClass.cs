@@ -35,7 +35,6 @@ public class ArrowBaseClass : MonoBehaviour {
 
     public virtual void Shoot(float speed, PlayerPawn owner) {
         this.owner = owner;
-        //TODO: should have null check --Should it? -- well, I had to made a base class to avoid this
         Physics2D.IgnoreCollision(owner.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         GetComponent<Collider2D>().enabled = true;
         Vector2 direction = transform.rotation * Vector2.right;
@@ -62,22 +61,10 @@ public class ArrowBaseClass : MonoBehaviour {
         GetComponentInChildren<LightScript>().FadeAway(fadeTime);
         Destroy(gameObject, fadeTime);
     }
-
-    //TODO: Test if this can be done better
-    void OnCollisionEnter2D(Collision2D otherObject)
-    {
-        OnCollision(otherObject);
-    }
-
-    protected virtual void OnCollision(Collision2D otherObject)
+    
+    protected virtual void OnCollisionEnter2D(Collision2D otherObject)
     {
         PlayerPawn player = otherObject.gameObject.GetComponent<PlayerPawn>();
-        //TODO: Remove me
-        if (player == owner)
-        {
-            Logger.Log("owner: " + owner, this, LogLevel.Log);
-            return;
-        }
         
         if (!arrowStoped)
         {
@@ -102,8 +89,7 @@ public class ArrowBaseClass : MonoBehaviour {
         }
     }
     
-    //TODO: this needs to made virtual
-    void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "ArrowPassThough")
         {
@@ -111,8 +97,7 @@ public class ArrowBaseClass : MonoBehaviour {
         }
     }
     
-    //TODO: this needs to be made  virtual
-    void OnTriggerExit2D(Collider2D other)
+    protected virtual void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "ArrowPassThough")
         {

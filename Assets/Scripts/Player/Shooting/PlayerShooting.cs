@@ -37,7 +37,6 @@ public class PlayerShooting : MonoBehaviour {
 
     public void AddArrows(int arrowsToAdd)
     {
-        //TODO: Data validation?
         numberOfArrows += arrowsToAdd;
     }
 

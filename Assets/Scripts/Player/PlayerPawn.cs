@@ -55,17 +55,9 @@ public class PlayerPawn : MonoBehaviour {
     }
     
 	void Start () {
-        //TODO: this needs to be removed
-        if (GM.GameInstance == null)
-        {
-            controllerIndex = GM.AddPlayer(this);
-            controls = new PlayerInput(GM.GetProfile(controllerIndex).KeyBinding, controllerIndex);
-            return;
-        }
         controls = new PlayerInput(playerParent.Profile.KeyBinding, PlayerIndex);
     }
 	
-	// Update is called once per frame
 	void Update () {
 
         lightComponent.UpdateTransperency();

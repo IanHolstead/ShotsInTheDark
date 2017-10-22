@@ -12,7 +12,11 @@ public class PlayerInput {
         this.keyBinding = keyBinding;
 
         gamepad = ControllerManager.instance.RequestSpecificGamepad(playerIndex);
-        //TODO: what if this returns null?
+
+        if (gamepad == null)
+        {
+            Logger.Log("Didn't get a gamepad!!", this, LogLevel.Error);
+        }
     }
 
     public float GetAxis(AxisControl control)

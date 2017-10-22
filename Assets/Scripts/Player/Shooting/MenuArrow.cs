@@ -14,7 +14,7 @@ public class MenuArrow : ArrowBaseClass{
         //stop arrow at right location
     }
 
-    protected override void OnCollision(Collision2D otherObject)
+    protected override void OnCollisionEnter2D(Collision2D otherObject)
     {
         
     }

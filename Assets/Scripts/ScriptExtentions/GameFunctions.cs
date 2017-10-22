@@ -12,8 +12,8 @@
             return Mathf.Clamp(MapRange(value, inRangeA, inRangeB, outRangeMin, outRangeMax), outRangeMin, outRangeMax);
         }
     }
-
-    //TODO: Remove? This is a horrible way to do this but its nice and easy for testing
+    
+    //This isn't a good practice but it's pretty convient for testing
     public class DoOnce
     {
         bool closed;
