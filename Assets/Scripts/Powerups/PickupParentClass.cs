@@ -11,6 +11,7 @@ public abstract class PickupParentClass : MonoBehaviour {
             PlayerPawn player = other.GetComponent<PlayerPawn>();
 
             UsePickup(player);
+            PowerupManager.pickupPickedup();
 
             Destroy(gameObject, fadeTime);
             GetComponentInChildren<LightScript>().FadeAway(fadeTime);
@@ -20,11 +21,5 @@ public abstract class PickupParentClass : MonoBehaviour {
     }
 
     public abstract void UsePickup(PlayerPawn parent);
-
-    //TODO: rewrite this
-    void OnDestroy()
-    {
-        PowerupManager.pickupPickedup();
-
-    }
+    
 }

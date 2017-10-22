@@ -17,7 +17,6 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
 
     void Awake()
     {
-        Setup();
         startLocations = new KeyValuePair<StartLocation, bool>[maxPlayerCount];
     }
 
@@ -47,11 +46,9 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
             pawn.SetPlayerParent(player);
             pawn.SetInitialDirection(startLocation.transform.rotation);
         }
-	}
-	
-	void Update () {
-		
-	}
+
+        OnBeginPlay();
+	}	
 
     /// <summary>
     /// Returns a start location on the map. If called with no number, the first free location is returned. If no free locations are availble it returns null.
@@ -75,7 +72,6 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
         }
         else
         {
-            //TODO: decide what behavior this should have
             if (startLocations[number].Value)
             {
                 Logger.Log("Start location was already in use!", this, LogLevel.Warning);
@@ -85,6 +81,8 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
         }
     }
 
-    //Set default values here //TODO: remove?
-    public abstract void Setup();
+    /// <summary>
+    /// Use this to set add behaviour on start (happens at end of start)
+    /// </summary>
+    public virtual void OnBeginPlay() {}
 }

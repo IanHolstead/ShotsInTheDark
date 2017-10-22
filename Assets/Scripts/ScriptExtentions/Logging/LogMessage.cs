@@ -26,7 +26,7 @@ public class LogMessage {
     {
         this.logMessage = logMessage.ToString();
         logTime = System.DateTime.Now.ToString();
-        this.callingMethod = callingMethod.GetType().ToString(); //TODO
+        this.callingMethod = callingMethod.GetType().ToString(); //TODO: add class to logger
         this.level = level;
     }
 

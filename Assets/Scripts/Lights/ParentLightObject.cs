@@ -3,18 +3,17 @@
 //TODO: this isn't used
 public abstract class ParentLightObject : MonoBehaviour
 {
-
     public float defaultFadeTime = .25f;
 
-    public virtual float getFadeTime()
+    public virtual float GetFadeTime()
     {
         return defaultFadeTime;
     }
 
-    public void fadeObjectAway()
+    public void FadeObjectAway()
     {
-        Destroy(gameObject, getFadeTime());
-        GetComponentInChildren<LightScript>().FadeAway(getFadeTime());
+        Destroy(gameObject, GetFadeTime());
+        GetComponentInChildren<LightScript>().FadeAway(GetFadeTime());
         //TODO: this looks wrong
         GetComponent<SpriteRenderer>().enabled = false;//color = new Color(255, 255, 255, 0);
     }

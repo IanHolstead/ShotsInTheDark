@@ -14,9 +14,8 @@ public class PlayerLight : MonoBehaviour {
 
         lights = new Dictionary<LightScript, float>();
     }
-
-    //TODO: rename to UpdateTransperency
-    public void SetTransperency()
+    
+    public void UpdateTransperency()
     {
         float alpha = 0f;
         foreach (KeyValuePair<LightScript,float> light in lights)
@@ -26,7 +25,6 @@ public class PlayerLight : MonoBehaviour {
         Color spiteColour = characterSpritRender.color;
         spiteColour.a = Mathf.Clamp01(alpha);
         characterSpritRender.color = spiteColour;
-        //TODO: should do the same for arrow.
         arrowSpritRender.color = spiteColour;
     }
 

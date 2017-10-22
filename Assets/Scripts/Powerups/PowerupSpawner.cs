@@ -11,27 +11,17 @@ public class PowerupSpawner : MonoBehaviour {
     public float earliestSpawn = 0f;
     public float latestSpawn = 25f;
 
-    //public GameObject LightEmUp;
-    //public GameObject MoreArrows;
-    //public GameObject BetterBow;
-
     public GameObject[] powerups;
+
+    //POLISH: There should be a way to control the spawn rates per powerup
 
 	public AudioClip sound;
 	public AudioClip got;
 
 
     void Start () {
-        //init();
         Setup();
     }
-
-    //void init()
-    //{
-    //    powerups.Add(LightEmUp);
-    //    powerups.Add(MoreArrows);
-    //    powerups.Add(BetterBow);
-    //}
 
     void Setup()
     {
@@ -40,12 +30,11 @@ public class PowerupSpawner : MonoBehaviour {
 
         if (powerups.Length == 0)
         {
-            Logger.Log("No Powerups!", this, LogLevel.Error);
+            Logger.Log("No Powerups!", this, LogLevel.Warning);
             Destroy(gameObject);
             return;
         }
-        randomSpawnTime = Random.Range(earliestSpawn, latestSpawn);
-        pickupToSpawn = powerups[Random.Range(0, powerups.Length - 1)];
+        randomSpawnTime = ChooseSpawnTime();
         Logger.Log(pickupToSpawn, this, LogLevel.Log);
     }
 
@@ -58,10 +47,27 @@ public class PowerupSpawner : MonoBehaviour {
         if (age >= randomSpawnTime)
         {
             PowerupManager.pickupSpawned();
+            pickupToSpawn = ChoosePickup();
             Spawn();
         }
     }
 
+    //POLISH: this is very niave. should consider how the game is going.
+    private float ChooseSpawnTime()
+    {
+        return Random.Range(earliestSpawn, latestSpawn);
+    }
+
+    //POLISH: this is very niave. should consider how the game is going.
+    private GameObject ChoosePickup()
+    {
+        return powerups[Random.Range(0, powerups.Length - 1)];
+    }
+
+    /* POLISH: This code works and all, but there isn't any way to tune the game play
+    * ultimately, logic for how pickups are spawned is going to have to be moved into
+    * its own class that considers all the spawners and how the game is going and stuff 
+    */
     void Spawn()
     {
         Instantiate(pickupToSpawn, transform.position, transform.rotation);

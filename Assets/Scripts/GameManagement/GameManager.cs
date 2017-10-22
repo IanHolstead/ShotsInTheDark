@@ -58,7 +58,6 @@ public static class GM {
     public static PlayerProfile GetProfile(int playerID)
     {
         Logger.Log("GM.GetProfile DEPRICATED", null, LogLevel.Warning);
-        //TODO: implemented yet
         return new PlayerProfile();
     }
 }

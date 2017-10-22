@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ControlWrapping;
 
-
-//TODO: this should probably implement an interface or something.
-public class ControllerManager : MonoBehaviour //: HoloToolkit.Unity.Singleton<ControllerManager>
+public class ControllerManager : MonoBehaviour 
 {
     private const int maxNumberOfGamePads = 4;
 
@@ -14,15 +12,13 @@ public class ControllerManager : MonoBehaviour //: HoloToolkit.Unity.Singleton<C
     Gamepad.UpdateStateDel[] gamePadStateUpdaters = new Gamepad.UpdateStateDel[4];
 
     private int numberOfGamepadsInUse = 0;
-
-    // Use this for initialization
+    
     void Awake()
     {
         Logger.Log("ControllerManagerAwake", this, LogLevel.Log);
         instance = this;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         foreach (Gamepad.UpdateStateDel updater in gamePadStateUpdaters)

@@ -8,13 +8,14 @@ public class PickupLightEmUp : PickupParentClass {
 
     public override void UsePickup(PlayerPawn player)
     {
-        foreach (GameObject otherPlayer in GameObject.FindGameObjectsWithTag("Player"))
+        foreach (Player otherPlayer in GM.GameInstance.Players)
         {
-            if (otherPlayer.GetComponent<PlayerPawn>() != player)
+            if (otherPlayer.Pawn != player && otherPlayer.Pawn.IsPlayerAlive)
             {
-                GameObject light = Instantiate(lightPlayersUp, transform.position + new Vector3(0, 0, -1), transform.rotation);
-                light.GetComponent<LightPlayersUp>().playerToStalk = otherPlayer;
-                light.GetComponent<LightPlayersUp>().lifeSpan = lightUpLength;
+                GameObject lightGameObject = Instantiate(lightPlayersUp, transform.position + new Vector3(0, 0, -1), transform.rotation);
+                LightPlayersUp light = lightGameObject.GetComponent<LightPlayersUp>();
+                light.playerToStalk = otherPlayer.Pawn.gameObject;
+                light.lifeSpan = lightUpLength;
             }
         }
     }

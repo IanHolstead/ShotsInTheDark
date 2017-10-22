@@ -4,6 +4,9 @@ using System.Collections.Generic;
 public class LightScript : MonoBehaviour {
     float radius;
     List<PlayerLight> characters;
+    private Light lightRef;
+
+    private const float LIGHT_TO_COLLIDER_RADUIS = 2.24f;
 
     float fadeTime = -1f;
     float age = 0f;
@@ -11,16 +14,19 @@ public class LightScript : MonoBehaviour {
 
     public AnimationCurve LightFalloff;
 
-    private const float LIGHT_TO_COLLIDER_RADUIS = 2.24f;
+    
 
-    //Add light ref
-
-	void Start () {
+    void Awake()
+    {
+        lightRef = GetComponent<Light>();
         characters = new List<PlayerLight>();
+    }
+
+    void Start () {
         //makes the detection object the same size as the light
         radius = GetComponent<Light>().range;
         GetComponent<CircleCollider2D>().radius = radius*LIGHT_TO_COLLIDER_RADUIS;
-        initialLightIntensity = GetComponent<Light>().intensity;
+        initialLightIntensity = lightRef.intensity;
     }
 	
 	void Update () {
@@ -92,15 +98,6 @@ public class LightScript : MonoBehaviour {
 			character.removeLight(this);
 		}
 	}
-	
-    //TODO: remove me
-	//void OnDestroy()
-	//{
- //       foreach (characterLight character in characters)
- //       {
- //           character.removeLight(this);
- //       }
- //   }
 
     public void FadeAway(float timeToFade)
     {
@@ -118,8 +115,7 @@ public class LightScript : MonoBehaviour {
         if (fadeTime != -1)
         {
             float percentDead = age / fadeTime;
-            //TODO: use light ref
-            GetComponent<Light>().intensity = Mathf.Lerp(initialLightIntensity, 0f, percentDead);
+            lightRef.intensity = Mathf.Lerp(initialLightIntensity, 0f, percentDead);
             lightPercent *= percentDead;
         }
         
@@ -128,7 +124,7 @@ public class LightScript : MonoBehaviour {
 
     float GetDistance ( Vector2 position)
     {
-        Vector2 difference = this.transform.position;
+        Vector2 difference = transform.position;
         difference -= position;
         return difference.magnitude;
     }

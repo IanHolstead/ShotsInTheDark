@@ -5,8 +5,4 @@ using UnityEngine;
 
 public class TestMapScript : MapScriptBaseClass
 {
-    public override void Setup()
-    {
-        //throw new NotImplementedException();
-    }
 }

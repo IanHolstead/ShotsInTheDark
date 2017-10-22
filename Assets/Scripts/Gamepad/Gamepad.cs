@@ -219,7 +219,6 @@ namespace ControlWrapping
         {
             if ((int)axis < 450)
             {
-                //TODO: Feels bad man
                 return GetButton((ActionKeyCode)((int)axis)) ? 1 : 0;
             }
             switch (axis)

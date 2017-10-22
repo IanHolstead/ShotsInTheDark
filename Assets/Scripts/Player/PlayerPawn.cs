@@ -37,6 +37,14 @@ public class PlayerPawn : MonoBehaviour {
         }
     }
 
+    public bool IsPlayerAlive
+    {
+        get
+        {
+            return isPlayerAlive;
+        }
+    }
+
     void Awake()
     {
         //Get Components
@@ -45,8 +53,7 @@ public class PlayerPawn : MonoBehaviour {
         shootingComponent = GetComponent<PlayerShooting>();
         lightComponent = GetComponent<PlayerLight>();
     }
-
-	// Use this for initialization
+    
 	void Start () {
         //TODO: this needs to be removed
         if (GM.GameInstance == null)
@@ -61,7 +68,7 @@ public class PlayerPawn : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        lightComponent.SetTransperency();
+        lightComponent.UpdateTransperency();
 
         if (!isPlayerAlive)
         {

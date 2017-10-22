@@ -15,11 +15,12 @@ public class StartLocation : MonoBehaviour {
 		
 	}
 
-    void OnDrawGizmos()
-    {
-        DebugExtension.DrawCircle(transform.position, Vector3.back, GetColour(), radius);
-        DebugExtension.DrawArrow(transform.position, transform.rotation * Vector3.right, GetColour());
-    }
+    //TODO: IAN YOU BIG DUMB DUMB YOU CAN'T REFRENCE CODE IN THE EXTENSTIONS FOLDER
+    //void OnDrawGizmos()
+    //{
+    //    DebugExtension.DrawCircle(transform.position, Vector3.back, GetColour(), radius);
+    //    DebugExtension.DrawArrow(transform.position, transform.rotation * Vector3.right, GetColour());
+    //}
 
     private Color GetColour()
     {
