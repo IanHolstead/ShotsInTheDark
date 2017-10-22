@@ -15,14 +15,14 @@ namespace ControlWrapping
 
         public Vector2 clampInDegrees = new Vector2(360, 180);
         private bool lockCursor;
-        private float sensitivityX = 2;
-        private float sensitivityY = 2;
-        private float smoothingX = 3;
-        private float smoothingY = 3;
+        //private float sensitivityX = 2;
+        //private float sensitivityY = 2;
+        //private float smoothingX = 3;
+        //private float smoothingY = 3;
         public Vector2 sensitivity = new Vector2(2, 2);
         public Vector2 smoothing = new Vector2(3, 3);
         public Vector2 targetDirection;
-        public Vector2 targetCharacterDirection;
+        //public Vector2 targetCharacterDirection;
 
 
         public KeyMouseInputWrapper()

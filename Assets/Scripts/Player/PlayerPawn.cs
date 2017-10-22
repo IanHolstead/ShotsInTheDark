@@ -21,19 +21,14 @@ public class PlayerPawn : MonoBehaviour {
     private Player playerParent;
 
     private PlayerInput controls;
-
-    private int controllerIndex;
+    
     bool isPlayerAlive = true;
 
     public int PlayerIndex
     {
         get
         {
-            if (playerParent != null)
-            {
-                return playerParent.PlayerID;
-            }
-            return controllerIndex;
+            return playerParent.PlayerID;
         }
     }
 
