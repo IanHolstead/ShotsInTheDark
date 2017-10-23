@@ -66,7 +66,7 @@ public class PlayerShooting : MonoBehaviour {
     {
         if (timeSinceLastShot >= fireRate)
         {
-            Logger.Log("Drawing!", this, LogLevel.Log);
+            Logger.Log("Drawing!", this, LogLevel.Verbose);
             isShooting = true;
             arrowComponent.SetActive(true);
 
@@ -89,7 +89,7 @@ public class PlayerShooting : MonoBehaviour {
                 GameObject arrow = Instantiate(arrowPrefab, arrowComponent.transform.position, arrowComponent.transform.rotation);
                 arrow.GetComponent<ArrowBaseClass>().Shoot(arrowSpeed, GetComponent<PlayerPawn>());
 
-                Logger.Log("Shooting!", this, LogLevel.Log);
+                Logger.Log("Shooting!", this, LogLevel.Verbose);
             }
             isShooting = false;
             arrowComponent.SetActive(false);

@@ -15,7 +15,7 @@ public class ControllerManager : MonoBehaviour
     
     void Awake()
     {
-        Logger.Log("ControllerManagerAwake", this, LogLevel.Log);
+        Logger.Log("ControllerManagerAwake", this, LogLevel.Verbose);
         instance = this;
     }
     

@@ -74,7 +74,7 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
         {
             if (startLocations[number].Value)
             {
-                Logger.Log("Start location was already in use!", this, LogLevel.Warning);
+                Logger.Log("Start location was already in use!", this, LogLevel.Log);
             }
             startLocations[number] = new KeyValuePair<StartLocation, bool>(startLocations[number].Key, true);
             return startLocations[number].Key;

@@ -35,7 +35,7 @@ public class PowerupSpawner : MonoBehaviour {
             return;
         }
         randomSpawnTime = ChooseSpawnTime();
-        Logger.Log(pickupToSpawn, this, LogLevel.Log);
+        Logger.Log(pickupToSpawn, this, LogLevel.Verbose);
     }
 
     void Update () {

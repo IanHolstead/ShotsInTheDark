@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ControlWrapping;
+using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour {
     Gamepad[] gamepads;
@@ -25,14 +26,12 @@ public class MenuController : MonoBehaviour {
             controllerPlayerIDMapping[i] = -1;
         }
     }
-
-    // Use this for initialization
+    
     void Start () {
         GetAllGamePads();
         titleScreenMovement = FindObjectOfType<PlayerMovement>();
 	}
 	
-	// Update is called once per frame
 	void Update () {
 
         if (blockInputTimer >= 0)
@@ -56,10 +55,12 @@ public class MenuController : MonoBehaviour {
                     //Load menu
                     state = MenuState.MainMenu;
                     //TODO: Transition time
-                    blockInputTimer = 1.5f;
+                    blockInputTimer = .5f;
+                    Logger.Log("Player select", this, LogLevel.Log);
                 }
                 break;
             case MenuState.MainMenu:
+                state = MenuState.PlayerSelect;
                 break;
             case MenuState.PlayerSelect:
                 for (int i = 0; i < GM.MAXPLAYERCOUNT; i++)
@@ -70,10 +71,16 @@ public class MenuController : MonoBehaviour {
                         {
                             //register player
                             controllerPlayerIDMapping[i] = GM.GameInstance.AddPlayer(i);
+                            Logger.Log("Added controller: " + i + " to player: " + controllerPlayerIDMapping[i], this, LogLevel.Log);
                         }
                     }
                     else
                     {
+                        if (MenuInput.GetStartKeyDown(gamepads[i]))
+                        {
+                            state = MenuState.LevelSelect;
+                            Logger.Log("Players confirmed: " + GM.GameInstance.Players.Capacity, this, LogLevel.Log);
+                        }
                         //pass on input
                     }
                     
@@ -82,6 +89,8 @@ public class MenuController : MonoBehaviour {
             case MenuState.LevelSelect:
                 if (MenuInput.GetSelectKeyDown(gamepads))
                 {
+                    Logger.Log("Loading DevLevel3.0", this, LogLevel.Log);
+                    SceneManager.LoadScene("DevLevel3.0");
                     //Get current stage
                     //load current stage
                     return;

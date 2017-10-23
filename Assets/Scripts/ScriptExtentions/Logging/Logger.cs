@@ -6,7 +6,7 @@ public static class Logger
 
     public static bool useInGameLogger = false;
 
-    static LogLevel currentLogLevel = LogLevel.Warning;
+    static LogLevel currentLogLevel = LogLevel.Log;
 
     public static InGamePanel inGameLogConsole = UnityEngine.Object.FindObjectOfType<InGamePanel>();
 
@@ -71,11 +71,11 @@ public static class Logger
 /// </item>
 /// <item>
 /// <term>Verbose: </term>
-/// <description>for calls which occure every frame.</description>
+/// <description>For debugging info which doesn't need printing most of the time</description>
 /// </item>
 /// <item>
 /// <term>Facist: </term>
-/// <description>for extrainious information.</description>
+/// <description>for calls which occure every frame.</description>
 /// </item>
 /// </list>
 /// </summary>

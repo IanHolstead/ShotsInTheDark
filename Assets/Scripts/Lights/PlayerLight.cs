@@ -47,7 +47,7 @@ public class PlayerLight : MonoBehaviour {
 
     void OnDisable()
     {
-        Logger.Log("Removing " + GetComponent<PlayerPawn>() + " from Player Light", this, LogLevel.Log);
+        Logger.Log("Removing " + GetComponent<PlayerPawn>() + " from Player Light", this, LogLevel.Verbose);
         foreach (KeyValuePair<LightScript, float> light in lights)
         {
             light.Key.RemoveCharacter(this);

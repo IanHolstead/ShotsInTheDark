@@ -63,7 +63,8 @@ public class LightScript : MonoBehaviour {
         //TODO: Tags are the worst
         if (other.gameObject.tag == "Player")
         {
-            Logger.Log("Added: " + other.GetComponent<PlayerPawn>().PlayerIndex, this, LogLevel.Log);
+            //TODO: Crashes on menu character
+            //Logger.Log("Added: " + other.GetComponent<PlayerPawn>().PlayerIndex, this, LogLevel.Verbose);
 
             characters.Add(other.GetComponent<PlayerLight>());
         }
@@ -75,7 +76,8 @@ public class LightScript : MonoBehaviour {
         //TODO: Tags are the worst
         if (other.gameObject.tag == "Player")
         {
-            Logger.Log("Removed: " + other.GetComponent<PlayerPawn>().PlayerIndex, this, LogLevel.Log);
+            //TODO: Crashes on menu character
+            //Logger.Log("Removed: " + other.GetComponent<PlayerPawn>().PlayerIndex, this, LogLevel.Verbose);
             other.GetComponentInParent<PlayerLight>().removeLight(this);
             characters.Remove(other.GetComponent<PlayerLight>());
         }
@@ -85,7 +87,7 @@ public class LightScript : MonoBehaviour {
     public void RemoveCharacter(PlayerLight character)
     {
         characters.Remove(character);
-        Logger.Log("Removed: " + character, this, LogLevel.Log);
+        Logger.Log("Removed: " + character, this, LogLevel.Verbose);
     }
 
 	void OnDisable()

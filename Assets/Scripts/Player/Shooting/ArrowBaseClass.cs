@@ -71,7 +71,7 @@ public class ArrowBaseClass : MonoBehaviour {
             if (player)
             {
                 bool isPlayerDead = player.OnShot(damage);
-                Logger.Log(player.ToString() + isPlayerDead, this, LogLevel.Log);
+                Logger.Log(player.ToString() + isPlayerDead, this, LogLevel.Verbose);
                 if (!isPlayerDead)
                 {
                     PickupArrow(player);

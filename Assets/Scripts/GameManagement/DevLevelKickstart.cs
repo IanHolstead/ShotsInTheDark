@@ -12,10 +12,11 @@ public class DevLevelKickstart : MonoBehaviour {
         if (GM.GameInstance == null)
         {
             FindObjectOfType<GameInstance>().Kickstart();
-        }
-        for (int i = 0; i < numberOfPlayers; i++)
-        {
-            GM.GameInstance.AddPlayer(i);
+
+            for (int i = 0; i < numberOfPlayers; i++)
+            {
+                GM.GameInstance.AddPlayer(i);
+            }
         }
     }
 }

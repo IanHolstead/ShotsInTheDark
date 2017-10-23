@@ -101,7 +101,7 @@ public class PlayerPawn : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        Logger.Log("Player hit: " + other, this, LogLevel.Log);
+        Logger.Log("Player hit: " + other, this, LogLevel.Verbose);
     }
 
     void Die()
