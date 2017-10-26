@@ -8,35 +8,127 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
     public int minPlayerCount = 2;
     [Range(1, GM.MAXPLAYERCOUNT)]
     public int maxPlayerCount = 4;
-
-    //public GameObject GameMode;
+    
     public GameObject DefaultPawn;
 
+    public float matchStartDelay = 1;
+    public float matchEndDelay = 3;
 
-    private KeyValuePair<StartLocation, bool>[] startLocations;
+    private List<StartLocation> startLocations;
+    private List<bool> startLocationsUsed;
+
+    private MatchState state = MatchState.WaitingToStart;
+
+    private float age = 0;
+
+    public MatchState State
+    {
+        get
+        {
+            return state;
+        }
+    }
 
     void Awake()
     {
-        startLocations = new KeyValuePair<StartLocation, bool>[maxPlayerCount];
+        startLocations = new List<StartLocation>(GM.MAXPLAYERCOUNT);
+        startLocationsUsed = new List<bool>(GM.MAXPLAYERCOUNT);
+
+        for (int i = 0; i < GM.MAXPLAYERCOUNT; i++)
+        {
+            startLocations.Add(null);
+            startLocationsUsed.Add(false);
+        }
     }
 
-    void Start () {
+    protected virtual void Start ()
+    {
+        age = matchStartDelay;
+        GM.Map = this;
+        FindPlayerStarts();
+        SpawnPlayers();
+	}	
+
+    protected virtual void Update()
+    {
+        if (age > 0)
+        {
+            age -= Time.deltaTime;
+        }
+        switch (state)
+        {
+            case MatchState.WaitingToStart:
+                if (age <= 0)
+                {
+                    state = MatchState.Running;
+                    Logger.Log("Starting Match");
+                }
+                break;
+            case MatchState.Running:
+                CheckForVictory();
+                break;
+            case MatchState.Paused:
+                break;
+            case MatchState.Finished:
+                if (age <= 0)
+                {
+                    FinishMatch();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected virtual void FindPlayerStarts()
+    {
         StartLocation[] starts = FindObjectsOfType<StartLocation>();
 
+        int numberOfValidStarts = 0;
         foreach (StartLocation start in starts)
         {
-            //if (!startLocations[start.playerNumber].Equals(null))
-            //{
-            //    Logger.Log("The same player number is used twice!", this, LogLevel.Warning);
-            //}
-            startLocations[start.playerNumber] = new KeyValuePair<StartLocation, bool>(start, false);
+            if (start.numberOfPlayers == -1 || start.numberOfPlayers == GM.GameInstance.Players.Count)
+            {
+                if (startLocations.Count > start.playerNumber && startLocations[start.playerNumber] != null)
+                {
+                    Logger.Log("The same player number is used twice!", this, LogLevel.Warning);
+                    numberOfValidStarts--;
+                }
+                numberOfValidStarts++;
+                startLocations[start.playerNumber] = start;
+                startLocationsUsed[start.playerNumber] = false;
+            }
         }
 
-        if (starts.Length < GM.GameInstance.Players.Count)
+        bool hitValidStart = false;
+        for (int i = GM.MAXPLAYERCOUNT - 1; i > 0; i--)
+        {
+            if (startLocations[i] == null)
+            {
+                if (hitValidStart)
+                {
+                    Logger.Log("Missing start location: " + (i - 1), this, LogLevel.Warning);
+                }
+                else
+                {
+                    startLocations.RemoveAt(i);
+                    startLocationsUsed.RemoveAt(i);
+                }
+            }
+            else
+            {
+                hitValidStart = true;
+            }
+        }
+
+        if (numberOfValidStarts < GM.GameInstance.Players.Count)
         {
             Logger.Log("Too many players for level!", this, LogLevel.Error);
         }
+    }
 
+    protected virtual void SpawnPlayers()
+    {
         foreach (Player player in GM.GameInstance.Players)
         {
             StartLocation startLocation = GetStartLocation();
@@ -46,9 +138,46 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
             pawn.SetPlayerParent(player);
             pawn.SetInitialDirection(startLocation.transform.rotation);
         }
+    }
 
-        OnBeginPlay();
-	}	
+    protected virtual void CheckForVictory()
+    {
+        int numberOfLivingPlayers = 0;
+        Player winningPlayer = null;
+        foreach (Player player in GM.GameInstance.Players)
+        {
+            if (player.Pawn.IsPlayerAlive)
+            {
+                numberOfLivingPlayers++;
+                if (numberOfLivingPlayers == 1)
+                {
+                    winningPlayer = player;
+                }
+            }
+        }
+
+        if (numberOfLivingPlayers > 1)
+        {
+            return;
+        }
+        age = matchEndDelay;
+        state = MatchState.Finished;
+        WinnerPicked(winningPlayer);
+    }
+
+    protected virtual void WinnerPicked(Player winner)
+    {
+        //TODO: write this method
+        Logger.Log("Winning Player: " + winner, this, LogLevel.Log);
+    }
+
+    protected virtual void FinishMatch()
+    {
+        //TODO: Write this method
+        Logger.Log("Finished match", this, LogLevel.Log);
+    }
+
+    protected abstract void MapUpdates();
 
     /// <summary>
     /// Returns a start location on the map. If called with no number, the first free location is returned. If no free locations are availble it returns null.
@@ -60,29 +189,29 @@ public abstract class MapScriptBaseClass : Singleton<MapScriptBaseClass> {
     {
         if (number < minPlayerCount || number >= maxPlayerCount)
         {//get next unused location
-            for (int i = 0; i < startLocations.Length; i++)
+            for (int i = 0; i < startLocations.Count; i++)
             {
-                if (!startLocations[i].Value)
-                {//TODO: ugh. I don't like this :(
-                    startLocations[i] = new KeyValuePair<StartLocation, bool>(startLocations[i].Key, true);
-                    return startLocations[i].Key;
+                if (!startLocationsUsed[i])
+                {
+                    startLocationsUsed[i] = true;
+                    return startLocations[i];
                 }
             }
             return null;
         }
         else
         {
-            if (startLocations[number].Value)
+            if (startLocationsUsed[number])
             {
                 Logger.Log("Start location was already in use!", this, LogLevel.Log);
             }
-            startLocations[number] = new KeyValuePair<StartLocation, bool>(startLocations[number].Key, true);
-            return startLocations[number].Key;
+            startLocationsUsed[number] = true;
+            return startLocations[number];
         }
     }
+}
 
-    /// <summary>
-    /// Use this to set add behaviour on start (happens at end of start)
-    /// </summary>
-    public virtual void OnBeginPlay() {}
+public enum MatchState
+{
+    WaitingToStart, Running, Paused, Finished
 }

@@ -24,14 +24,27 @@ public static class Logger
     //TODO: This needs to be a priority Queue if its going to work.
     //private static LinkedList<KeyValuePair<float, LinkedListNode<LogMessage>>> toBeRemoved = new LinkedList<KeyValuePair<float, LinkedListNode<LogMessage>>>();
 
-    public static void Log(object toPrint, object callingClass = null, LogLevel logLevel = LogLevel.Warning)//, float duration = 0)
+    public static void Log(object toPrint, object callingClass = null, LogLevel logLevel = LogLevel.Log)//, float duration = 0)
     {
 
         if (currentLogLevel != LogLevel.None && currentLogLevel >= logLevel)
         {
             if (UnityEngine.Application.isEditor && !useInGameLogger)
             {
-                UnityEngine.Debug.Log(toPrint);
+                switch (logLevel)
+                {
+                    case LogLevel.None:
+                        break;
+                    case LogLevel.Error:
+                        UnityEngine.Debug.LogError(toPrint);
+                        break;
+                    case LogLevel.Warning:
+                        UnityEngine.Debug.LogWarning(toPrint);
+                        break;
+                    default:
+                        UnityEngine.Debug.Log(toPrint);
+                        break;
+                }
             }
             else if (useInGameLogger && inGameLogConsole != null)
             {

@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 2
+  numberOfPlayers: -1
   radius: 0.45
 --- !u!4 &172981641
 Transform:
@@ -267,6 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 0
+  numberOfPlayers: -1
   radius: 0.45
 --- !u!4 &228435632
 Transform:
@@ -395,6 +397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
+  numberOfPlayers: -1
   radius: 0.45
 --- !u!4 &1046418569
 Transform:
@@ -837,6 +840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 3
+  numberOfPlayers: -1
   radius: 0.45
 --- !u!4 &1691562860
 Transform:
@@ -895,6 +899,8 @@ MonoBehaviour:
   maxPlayerCount: 4
   DefaultPawn: {fileID: 1613276731080432, guid: 280212470106c35448815055f4bd9ec8,
     type: 2}
+  matchStartDelay: 1
+  matchEndDelay: 3
 --- !u!4 &1717975748
 Transform:
   m_ObjectHideFlags: 0

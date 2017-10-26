@@ -6,7 +6,7 @@ public static class GM {
     
     private static GameInstance gameInstance;
 
-    //private static GameMode gameMode;
+    private static MapScriptBaseClass map;
 
     public static GameInstance GameInstance
     {
@@ -25,6 +25,19 @@ public static class GM {
             {
                 Logger.Log("Trying to set game instance twice!", null, LogLevel.Warning);
             }
+        }
+    }
+
+    public static MapScriptBaseClass Map
+    {
+        get
+        {
+            return map;
+        }
+
+        set
+        {
+            map = value;
         }
     }
 }

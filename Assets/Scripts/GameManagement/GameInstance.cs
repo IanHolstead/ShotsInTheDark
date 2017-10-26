@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameInstance : MonoBehaviour {
     private List<Player> players;
 
+    public bool wasKickstarted = false;
+
     public List<Player> Players
     {
         get
@@ -22,15 +24,14 @@ public class GameInstance : MonoBehaviour {
             DestroyImmediate(this);
             return;
         }
+    }
 
-        if (GM.GameInstance != null)
+    void Start()
+    {
+        if (!wasKickstarted)
         {
-            //was already kickstarted
-            return;
+            Startup();
         }
-
-        Startup();
-
     }
 
     private void Startup()
@@ -45,12 +46,22 @@ public class GameInstance : MonoBehaviour {
     public void Kickstart()
     {
         Logger.Log("Kickstarting game instance, this better not be a real level!", this, LogLevel.Warning);
+        wasKickstarted = true;
         Startup();
     }
 	
 	void Update () {
-		
-	}
+        if (Input.GetKey(KeyCode.Escape))
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_WEBPLAYER
+            Application.OpenURL(webplayerQuitURL);
+#else
+            Application.Quit();
+#endif
+        }
+    }
 
     public Player GetPlayer(int id)
     {

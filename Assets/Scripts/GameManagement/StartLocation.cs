@@ -3,26 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StartLocation : MonoBehaviour {
+    [Range(0,GM.MAXPLAYERCOUNT - 1)]
     public int playerNumber;
+    [Range(-1, GM.MAXPLAYERCOUNT)]
+    public int numberOfPlayers = -1;
     public float radius = .45f;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 
     //TODO: IAN YOU BIG DUMB DUMB YOU CAN'T REFRENCE CODE IN THE EXTENSTIONS FOLDER
     //void OnDrawGizmos()
     //{
-    //    DebugExtension.DrawCircle(transform.position, Vector3.back, GetColour(), radius);
-    //    DebugExtension.DrawArrow(transform.position, transform.rotation * Vector3.right, GetColour());
+    //    DebugExtension.DrawCircle(transform.position, Vector3.back, GetCircleColour(), radius);
+    //    DebugExtension.DrawArrow(transform.position, transform.rotation * Vector3.right, GetArrowColour());
     //}
 
-    private Color GetColour()
+    private Color GetCircleColour()
+    {
+        switch (numberOfPlayers)
+        {
+            case (-1):
+                return Color.cyan;
+            case (2):
+                return Color.white;
+            case (3):
+                return Color.grey;
+            case (4):
+                return Color.black;
+
+            default:
+                return Color.yellow;
+        }
+    }
+
+    private Color GetArrowColour()
     {
         switch (playerNumber)
         {
